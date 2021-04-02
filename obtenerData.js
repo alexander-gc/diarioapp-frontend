@@ -1,21 +1,26 @@
+//URL para hacer las peticiones fetch. Backend subido en Heroku.
 var url = 'https://diario-app-alex.herokuapp.com/api/diario'
+
+//En este array se guardarán todos los registros. Luego podré usarlo con los métodos push, map, for, etc.
 var dataRegistros = [];
 
 async function obtenerData() {
 
-    //GET.
+    //Petición GET.
     var dataLista;
     await fetch(url)
     .then(response => response.json())
     .then(data => dataLista = data);
     
+    //Este ciclo 'for' llenará el array dataRegistros. Para que luego se pueda recorrer ese array con el map.
     for (var i = 0; i < dataLista.registros.length; i++) {  
         dataRegistros.push( dataLista.registros[i]);
     }
     
+    //Por cada registro individual que existe en el array de registros, lo recorrerá para mostrarlo con uso del DOM.
     dataRegistros.map(
         data => {
-
+            //En el HTML, se agregará un atributo 'tr' con sus hijos 'td'
             var padreTr = document.createElement('tr');
 
             var fechaTd = document.createElement('td')
@@ -32,45 +37,25 @@ async function obtenerData() {
 
             var imgTd = document.createElement('td');
             var imgValue = document.createElement('img');
-
             imgValue.src = data.imagen;
             imgValue.style = "height: 50px;";
-
             imgTd.appendChild(imgValue);
 
-            //var deleteTd = document.createElement('td');
-
-            //var linkDelete = document.createElement('a'); 
-            //var linkUpdate = document.createElement('a');
-            
-            //var val = linkDelete.nodeValue = data._id
-            //valorId.push(val);
-            //linkDelete.text = 'Eliminar'
-
-            //linkDelete.setAttribute('href', `${ await mandarDataBackend(data._id, {}, 'DELETE')}`);
-
-            //linkDelete.className = 'btn btn-danger me-2'
-            //linkUpdate.text = 'Editar';
-            //linkUpdate.setAttribute('href', 'editar.html');
-            //linkUpdate.className = 'btn btn-secondary'
-
-            //deleteTd.append(linkDelete)
-            
             padreTr.append(fechaTd, sentTd, descTd, imgTd);
-            
+            //El 'tr' padre, se anexará al elemento 'tbody' (cuerpo).
             document.getElementById('cuerpo').appendChild(padreTr);
         }
     ) 
-
 } 
 
-//Petición GET.
 obtenerData();
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 
 async function eliminarData() {
 
+    //Cuando el usuario presione el botón eliminar, se le pedirá que ingrese el #.
     var idX = parseInt(prompt('¿Qué registro desea eliminar? (Ingrese el #) '));
-
 
     let idArray = [];
 
@@ -82,7 +67,6 @@ async function eliminarData() {
 
     console.log("Eliminar ese id:" + idEliminado)
     
-    //Petición DELETE.
     const resp = await peticionDelete(idEliminado, {}, 'DELETE');
     const body = await resp.json();
 
@@ -98,9 +82,9 @@ async function eliminarData() {
 }
 
 async function peticionDelete( endpoint, data, method ) {
-
+    
+    // Petición DELETE, incluyendo el endpoint(id) y la ruta /eliminar.
     if (method === 'DELETE') {
-        //Se ingresa el /id
         const urlDelete = `${url}/eliminar/${endpoint}`
         return fetch(urlDelete, {
             method,
@@ -113,18 +97,23 @@ async function peticionDelete( endpoint, data, method ) {
 
 }
 
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
+
 async function editarData() {
 
     alert('Procesando y editando registro. Por favor espere unos segundos...')
 
     var idEdit = document.getElementById('numberId').value;
 
+    //Se almacenarán unicamente todos los id de los registros existentes.
     let idArray = [];
 
     for (let i = 0; i < dataRegistros.length; i++) {  
         idArray.push(dataRegistros[i]._id);
     } 
 
+    //Después de que el usuario ingrese el id (#) que desea editar, en el idArray buscará el id dependiendo el indice ingresado.
+    //Le resto 1, para que el usuario pueda ingresar del 1 en adelante, y se sincronice bien en la busqueda del indice.
     var idEditado = idArray[idEdit-1];
 
     if (!idEditado) {
@@ -137,7 +126,7 @@ async function editarData() {
     
     var fecha = document.getElementById('editarFecha').value;
 
-    var imagen = await img;
+    var imagen = await imgCloud;
 
     if (sentimiento.length < 5) {
         alert('El campo sentimiento requiere 5 o más carácteres');
@@ -152,14 +141,9 @@ async function editarData() {
         alert('Por favor ingrese una imágen de referencia');
         reiniciarPag();
     } 
-
-    console.log(sentimiento, descripcion, fecha, imagen);
     
-    //Petición PUT.
     const resp = await peticionPut(idEditado, {sentimiento, descripcion, fecha, imagen}, 'PUT');
     const body = await resp.json();
-
-    console.log(body);
 
         if (body.ok) {
             alert(`Editado correctamente la nota #${idEdit}`);
@@ -168,13 +152,11 @@ async function editarData() {
             alert("Ingrese correctamente los datos");
             reiniciarPag();
         }    
-    
 }
 
 async function peticionPut( endpoint, data, method ) {
-
+    // Petición PUT, incluyendo el endpoint(id), la ruta sigue siendo '/'.
     if (method === 'PUT') {
-        //Se ingresa el /id
         const urlEdit = `${url}/${endpoint}`
         return fetch(urlEdit, {
             method,
@@ -184,32 +166,40 @@ async function peticionPut( endpoint, data, method ) {
             body: JSON.stringify( data )
         });
     }
-
 }
 
+//Reiniciará el form de la página actual. Se vaciarán los campos.
 function reiniciarPag() {
     window.location.reload();
 }
 
+//Me regresará al index. 
 function reenviarPagIndex() {
     window.location.href = 'index.html';
 }
 
-var img;
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 
+var imgCloud; //Valor de la Url Img de Cloudinary.
+
+//La función será llamada desde el campo de imagen(file). Apenas haya un cambio ahí, será llamada.
 function editImg(input) {
-
+    //Se almacena el valor de la imagen. Si existe, será enviada como argumento en la función imgLista().
     if (input) {
-        file = input.files[0];          
-    } 
-    
-    img = imgLista(file);
+        var fileImg = input.files[0];          
+    }   
 
+    imgCloud = imgLista(fileImg);
+}
+
+async function imgLista(file) {
+    return imgUrl = await subirImagen(file);    
 }
 
 async function subirImagen(img) {
-    
-    const cloudUrl = 'https://api.cloudinary.com/v1_1/diyjcwivy/upload'
+    //Cloudinary: Base de datos en la nube para imágenes.
+    // Me guié de la documentación de Cloudinary, para poder consumir su api.
+    var cloudUrl = 'https://api.cloudinary.com/v1_1/diyjcwivy/upload'
 
     const formDataImg = new FormData();
     formDataImg.append('upload_preset', 'diario-app');
@@ -229,61 +219,7 @@ async function subirImagen(img) {
         }
 
     } catch (error) {
+        console.log(error);
         throw error;
     }
-
-} 
-
-async function imgLista(file) {
-
-    return imgUrl = await subirImagen(file);
-
-    //document.getElementById('cuerpo').appendChild(padreTr);
-    
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /*
-    console.log("######### DESCRIPCION #######")
-
-    //Desc
-    dataRegistros.map(
-        data => {
-            console.log(data.descripcion)
-        }
-    ) 
-
-    console.log("####### FECHA #########")
-
-    //Fecha
-    dataRegistros.map(
-        data => {
-            console.log(data.fecha)
-        }
-    ) 
-
-    console.log("######## TIMESTAMP ########")
-
-    //Timestamp
-    dataRegistros.map(
-        data => {
-            console.log(data.timestamp)
-        }
-    ) 
-*/

@@ -1,10 +1,10 @@
-const url = 'https://diario-app-alex.herokuapp.com/api/diario'
+var url = 'https://diario-app-alex.herokuapp.com/api/diario'
 var file;
 var img;
 
 //const url = 'localhost:4000/api/diario'
 
-function imgg(input) {
+function guardarImgFile(input) {
 
     if (input) {
         file = input.files[0];          
@@ -14,21 +14,23 @@ function imgg(input) {
 
 }
 
+async function imgLista(file) {
+    return imgUrl = await subirImagen(file);    
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
+
 async function datosFront() {
 
     function reiniciarForm() {
         window.location.reload();
-    //document.getElementById("form").reset();
     }
 
     alert('Procesando y guardando el registro, por favor espere unos segundos :)')
     
     var imagen = await img;
-    
     var sentimiento = document.getElementById('inputSentimiento').value;
-    
     var descripcion = document.getElementById('inputDescripción').value;
-    
     var fecha = document.getElementById('inputFecha').value;
     
     if (sentimiento.length < 5) {
@@ -45,8 +47,6 @@ async function datosFront() {
         reiniciarForm();
     } 
             
-    // POST
-
         var resp = await peticionPost('agregar', {sentimiento, descripcion, imagen, fecha}, 'POST');
         var body = await resp.json();
     
@@ -55,16 +55,13 @@ async function datosFront() {
             reiniciarForm();
         } else {
             alert('Hubo un error. Intenta nuevamente :(')
-            console.log(body.errores);
             reiniciarForm();
         } 
-
 }
 
 function peticionPost( endpoint, data, method ) {
-
     if (method === 'POST') {
-        //Se ingresa el /agregar
+        //Se ingresa el /agregar en el path, más los datos almacenados del form.
         const urlPost = `${url}/${endpoint}`;
         return fetch(urlPost, {
             method,
@@ -74,12 +71,13 @@ function peticionPost( endpoint, data, method ) {
             body: JSON.stringify(data)
         });
     } 
-
 }
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - -  */
 
 async function subirImagen(img) {
     
-    const cloudUrl = 'https://api.cloudinary.com/v1_1/diyjcwivy/upload'
+    var cloudUrl = 'https://api.cloudinary.com/v1_1/diyjcwivy/upload'
 
     const formDataImg = new FormData();
     formDataImg.append('upload_preset', 'diario-app');
@@ -102,14 +100,6 @@ async function subirImagen(img) {
     } catch (error) {
         throw error;
     }
-
 } 
 
-async function imgLista(file) {
-
-    return imgUrl = await subirImagen(file);
-
-    //document.getElementById('cuerpo').appendChild(padreTr);
-    
-}
 

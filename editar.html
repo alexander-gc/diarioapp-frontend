@@ -30,12 +30,12 @@
             <div class="row mb-3">
                 <label for="numberId" class="col-sm-2 col-form-label">Ingrese # del registro por editar</label>
                 <div class="col-sm-10">
-                    <input type="number" class="form-control" name="numberId" id="numberId">
+                    <input type="number" class="form-control" name="numberId" id="numberId" placeholder="El # depende por la posición del registro en la lista (1, 2, 3, etc...)">
                 </div>
             </div>
 
             <div class="row mb-3">
-                <label for="editarFecha" class="col-sm-2 col-form-label">Fecha</label>
+                <label for="editarFecha" class="col-sm-2 col-form-label">Fecha de hoy</label>
                 <div class="col-sm-10">
                     <input type="date" class="form-control" id="editarFecha" name="fecha" required>
                 </div>
@@ -43,18 +43,18 @@
             <div class="row mb-3">
                 <label for="editarSentimiento" class="col-sm-2 col-form-label">¿Cómo te sientes hoy?</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="editarSentimiento" name="sentimiento" minlength="5" required>
+                    <input type="text" class="form-control" id="editarSentimiento" name="sentimiento" minlength="5" placeholder="Ingresa 5 o más carácteres" autocomplete="off" required>
                 </div>
             </div>
             <div class="row mb-3">
-                <label for="editarDescripcion" class="col-sm-2 col-form-label">Descripción</label>
+                <label for="editarDescripcion" class="col-sm-2 col-form-label">Agregar nueva descripción</label>
                 <div class="col-sm-10">
-                    <textarea class="form-control" id="editarDescripcion" name="descripcion" rows="7" minlength="10" required></textarea>
+                    <textarea class="form-control" id="editarDescripcion" name="descripcion" rows="7" minlength="10"  placeholder="Detalla tu día. Ingresa 10 o más carácteres" autocomplete="off" required></textarea>
                     <!--<input type="textare" class="form-control" id="inputDescripción" name="descripcion" required=true>-->
                 </div>
             </div>
             <div class="row mb-3">
-                <label for="editarImagen" class="col-sm-2 col-form-label">Agregar imagen</label>
+                <label for="editarImagen" class="col-sm-2 col-form-label">Agregar otra imagen</label>
                 <div class="col-sm-10">
                     <input type="file" onchange="editImg(this)" class="form-control" id="editarImagen" name="imagen">
                 </div>

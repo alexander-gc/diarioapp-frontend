@@ -15,16 +15,16 @@
     <div>
         <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
             <div class="container-fluid">
-            <a class="navbar-brand" href="index.html">DiarioApp</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <div class="navbar-nav">
-                <a class="nav-link active" aria-current="page" href="index.html">Lista </a>
-                <a class="nav-link" href="crear.html">Agregar nota</a>
+                <a class="navbar-brand" href="index.html">DiarioApp</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav">
+                        <a class="nav-link active" aria-current="page" href="index.html">Lista </a>
+                        <a class="nav-link" href="crear.html">Agregar nota</a>
+                    </div>
                 </div>
-            </div>
             </div>
         </nav>
     </div>
@@ -36,7 +36,7 @@
         <form method="POST" id="form" class="mt-3">
 
             <div class="row mb-3">
-                <label for="inputFecha" class="col-sm-2 col-form-label">Fecha</label>
+                <label for="inputFecha" class="col-sm-2 col-form-label">Fecha de hoy</label>
                 <div class="col-sm-10">
                     <input type="date" class="form-control" id="inputFecha" name="fecha" required>
                 </div>
@@ -44,34 +44,30 @@
             <div class="row mb-3">
                 <label for="inputSentimiento" class="col-sm-2 col-form-label">¿Cómo te sientes hoy?</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="inputSentimiento" name="sentimiento" minlength="5" required>
+                    <input type="text" class="form-control" id="inputSentimiento" name="sentimiento" minlength="5" placeholder="Ingresa 5 o más carácteres" autocomplete="off" required>
                 </div>
             </div>
             <div class="row mb-3">
                 <label for="inputDescripción" class="col-sm-2 col-form-label">Descripción</label>
                 <div class="col-sm-10">
-                    <textarea class="form-control" id="inputDescripción" name="descripcion" rows="7" minlength="10" required></textarea>
-                    <!--<input type="textare" class="form-control" id="inputDescripción" name="descripcion" required=true>-->
+                    <textarea class="form-control" id="inputDescripción" name="descripcion" rows="7" minlength="10" placeholder="Detalla tu día. Ingresa 10 o más carácteres" autocomplete="off" required></textarea>
                 </div>
             </div>
             <div class="row mb-3">
                 <label for="inputImagen" class="col-sm-2 col-form-label">Agregar imagen</label>
                 <div class="col-sm-10">
-                    <input type="file" onchange="imgg(this)" class="form-control" id="inputImagen" name="imagen">
+                    <input type="file" onchange="guardarImgFile(this)" class="form-control" id="inputImagen" name="imagen">
                 </div>
             </div>
             
             <div class="d-grid gap-2">
                 <button type="button" class="btn btn-primary mt-5" onclick="datosFront()"> Guardar </button>       
             </div>
-                <!-- <a href="index.html" class="btn btn-primary" onclick="datosFront()"> Enviar </a> -->
+
         </form>
-
-
     </div>
 
 <script src="mandarData.js"></script>
-<script src="subirImg.js"></script>
 
 </body>
 </html>
